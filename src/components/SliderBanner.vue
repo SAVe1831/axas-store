@@ -1,8 +1,8 @@
 <template>
-  <VSheet class="mx-auto mt-8" center-active>
-    <VSlide-group center-active direction="horizontal">
-      <VSlide-group-item v-for="banner in banners" :key="banner.id ?? 'default-key'" >
-        <VCard class="mx-1 rounded-lg" height="146px" max-width="92vw">
+  <VSheet class="mt-8">
+    <VSlide-group disabled direction="horizontal">
+      <VSlide-group-item v-for="banner in banners" :key="banner.id ?? 'default-key'">
+        <VCard class="ml-4 mr-n3 rounded-lg" height="38.93vw" max-width="92vw">
           <div v-if="banner.cover?.includes('http')"  class="d-flex fill-height align-center justify-center">
             <img :src="banner.cover" alt="Banner Image" class="banner-image " />
           </div>

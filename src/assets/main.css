@@ -11,30 +11,33 @@
   list-style: none;
 }
 
-.input-container {
-  max-height: 56px;
+/* .input-container {
+  max-height: 14.93vw;
 }
 
 .search {
-  height: 36px;
+  height: 9.6vw;
 }
 
 .search > .v-input__control > .v-field > .v-field__field > .v-field__input {
   background-color: #FFFFFF;
-  max-height: 36px;
+  max-height: 9.6vw;
   border-radius: 8px;
 }
 .search > .v-input__control > .v-field > .v-field__field > .v-field__input > input::placeholder {
   color: rgba(30, 28, 28, 0.4);
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 4.26vw;
+  line-height: 4.8vw;
   font-weight: 600;
 }
 
 .v-input--density-default {
   --v-input-padding-top: 0px !important;
+} */
+ .v-field__input {
+  padding: 0px !important;
 }
 
 .v-bottom-navigation {
-  height: 48px !important;
+  height: 12.8vw !important;
 }
