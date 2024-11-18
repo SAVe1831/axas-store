@@ -1,5 +1,5 @@
 interface Categories {
-  id: number | null;
+  id: number;
   name: string | null;
   children_count: number | null;
   parent_id: number | null;

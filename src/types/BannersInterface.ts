@@ -1,14 +1,14 @@
 interface Banners {
-  id: number | null;
+  id: number;
   cover: string | null;
   product:  {
-    id: number | null;
+    id: number;
     name: string | null;
     price: number | null;
     positive_feedback_count: number | null;
     total_feedback_count: number | null;
     images: {
-      id: number | null;
+      id: number;
       image: string | null;
     };
     description: string | null;
@@ -26,7 +26,7 @@ interface Banners {
     popularity: number | null;
     in_favorites: boolean | null;
     category: {
-      id: number | null;
+      id: number;
       name: string | null;
       children_count: number | null;
       parent_id: number | null;
@@ -35,7 +35,7 @@ interface Banners {
       banner: string | null;
     };
     supercategory: {
-      id: number | null;
+      id: number;
       name: string | null;
       children_count: number | null;
       parent_id: number | null;
@@ -45,14 +45,14 @@ interface Banners {
     };
   };
   article: {
-    id: number | null;
+    id: number;
     created: number | null;
     cover: string | null;
     title: string | null;
     text: string | null;
   };
   category: {
-    id: number | null;
+    id: number;
     name: string | null;
     children_count: number | null;
     parent_id: number | null;

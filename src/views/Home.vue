@@ -3,6 +3,7 @@
     <Input />
     <SliderBanner :banners="banners" />
     <SliderCategory :categories="categories" />
+    <SpecialOffers :products="products" />
   </div>
 </template>
 
@@ -15,6 +16,9 @@ import type { Banners } from '@/types/BannersInterface';
 import SliderCategory from '../components/SliderCategory.vue';
 import { useCategoriesStore } from '@/stores/CategoriesStore';
 import type { Categories } from '@/types/CategoriesInterface';
+import SpecialOffers from '@/components/SpecialOffers.vue';
+import { useProductsStore } from '@/stores/ProductsStore';
+import { type products } from '@/types/ProductsInterface';
 
 const bannersStore = useBannersStore();
 const banners = ref<Banners[]>([]);
@@ -22,11 +26,17 @@ const banners = ref<Banners[]>([]);
 const categoriesStore = useCategoriesStore();
 const categories = ref<Categories[]>([]);
 
+const productsStore = useProductsStore();
+const products = ref<products[]>([]);
+
 onMounted(async () => {
   await bannersStore.getBanners();
   banners.value = bannersStore.banners;
   await categoriesStore.getCategories();
   categories.value = categoriesStore.categories;
+  await productsStore.getProducts();
+  products.value = productsStore.products;
+  console.log(products.value);
 });
 </script>
 
