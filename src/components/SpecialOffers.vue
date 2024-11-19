@@ -2,22 +2,22 @@
   <VContainer class="special-offer-container bg-white w-100 h-auto d-flex flex-column">
     <div class="d-flex justify-space-between align-center">
       <p class="special-offer-title">Спецпредложения</p>
-      <div class="special-offer-more d-flex align-center">
+      <RouterLink to="/catalog" class="more-link">
+        <div class="special-offer-more d-flex align-center">
         <p>Ещё</p>
-        <VIcon class="more-icon" size="6.4vw">mdi-chevron-right</VIcon>
-      </div>
+          <VIcon class="more-icon" size="24">mdi-chevron-right</VIcon>
+        </div>
+      </RouterLink>
     </div>
     <VSheet class="mt-4">
       <VSlide-group direction="horizontal">
-        <VSlide-group-item v-for="product in products" :key="product.id ?? 'default-key'">
+        <VSlide-group-item v-for="product in productsSpecial" :key="product.id ?? 'default-key'">
           <VCard class="product-card ga-2 pa-2 ml-4 mr-n2" width="44.27vw" height="70.4vw" color="#F3F5F9">
-            <VImg width="41.07vw" height="43.73vw" cover :src="product.thumbnail" class="product-image" alt="Product Image">
-              <img
-                :src="favorites[product.id] ? '/public/favorites-icon-yes.svg' : '/public/favorites-icon-no.svg'"
-                alt="Favorites"
-                class="favorite-icon position-absolute right-0 top-0 mr-1 mt-1"
-                @click="favorites[product.id] = !favorites[product.id]"
-              >
+            <VImg width="41.07vw" height="43.73vw" cover :src="product?.thumbnail ? product?.thumbnail : ''"
+              class="product-image" alt="Product Image">
+              <img :src="favorites[product.id] ? '/public/favorites-icon-yes.svg' : '/public/favorites-icon-no.svg'"
+                alt="Favorites" class="favorite-icon position-absolute right-0 top-0 mr-1 mt-1"
+                @click="favorites[product.id] = !favorites[product.id]">
             </VImg>
             <div class="product-info mt-2">
               <div class="feedbacks w-100 h-auto d-flex justify-start align-center">
@@ -26,7 +26,8 @@
                 <img src="/public/dot-icon.svg" alt="">
                 <div>{{ product.totalFeedbackCount }} {{ getAgeSuffix(product.totalFeedbackCount) }}</div>
               </div>
-              <span :style="{ color: product.oldPrice ? '#D22121' : '#000000' }" class="product-price">{{ product.price }} ₽ </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
+              <span :style="{ color: product.oldPrice ? '#D22121' : '#000000' }" class="product-price">{{ product.price }} ₽
+              </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
               <div class="product-description overflow-hidden">{{ product.description }}</div>
             </div>
           </VCard>
@@ -37,13 +38,15 @@
 </template>
 
 <script setup lang="ts">
+import type { productsType } from '@/types/ProductsInterface';
 import { ref } from 'vue';
-import type { products } from '@/types/ProductsInterface';
+import { useRoute } from "vue-router";
+
+const router = useRoute();
 
 defineProps<{
-  products: products[]
+  productsSpecial: productsType[]
 }>();
-
 const favorites = ref<Record<number, boolean>>({});
 
 const getAgeSuffix = (feedback) => {
@@ -55,6 +58,7 @@ const getAgeSuffix = (feedback) => {
       return 'отзывов';
   }
 };
+
 </script>
 
 <style scoped>
@@ -64,14 +68,15 @@ const getAgeSuffix = (feedback) => {
 }
 
 .special-offer-title {
-  font-size: 4.27vw;
-  line-height: 6.4vw;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
 .special-offer-more p {
-  font-size: 3.73vw;
-  line-height: 5.33vw;
+  font-size: 14px;
+  line-height: 18px;
   color: #32AFC0;
 }
 
@@ -88,19 +93,13 @@ const getAgeSuffix = (feedback) => {
   border-radius: 12px;
 }
 
-.product-card > .product-image {
+.product-card>.product-image {
   border-radius: 6px;
   background-color: #E3E3E3;
 }
 
-.favorite-icon {
-  width: 7.47vw !important;
-  height: 7.47vw !important;
-}
-
 .product-info {
   width: 100%;
-  height: 21.33vw;
 }
 
 .feedbacks {
@@ -108,22 +107,24 @@ const getAgeSuffix = (feedback) => {
 }
 
 .product-price {
-  font-size: 4.27vw;
-  line-height: 6.4vw;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 .product-old-price {
-  font-size: 3.2vw;
+  font-size: 12px;
   color: #1C1C1E66;
   text-decoration: line-through;
 }
 
 .product-description {
-  font-size: 3.73vw;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
   height: 9.07vw;
-  line-height: 4.22vw;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
-
 </style>

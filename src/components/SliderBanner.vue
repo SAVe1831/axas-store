@@ -21,7 +21,6 @@ import type { Banners } from '@/types/BannersInterface';
 defineProps<{
   banners: Banners[]
 }>();
-
 </script>
 
 <style scoped>

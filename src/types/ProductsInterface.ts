@@ -6,7 +6,7 @@ interface filter {
   flag_value: boolean | null;
 }
 
-interface products {
+interface productsType {
   id: number;
   name: string | null;
   price: number | null;
@@ -50,4 +50,4 @@ interface products {
   }
 }
 
-export type { filter, products }
+export type { filter, productsType }

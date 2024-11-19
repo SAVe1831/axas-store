@@ -3,7 +3,8 @@
     <Input />
     <SliderBanner :banners="banners" />
     <SliderCategory :categories="categories" />
-    <SpecialOffers :products="products" />
+    <SpecialOffers :productsSpecial="productsSpecial" />
+    <YouWillLike :productsWillLike="productsWillLike" />
   </div>
 </template>
 
@@ -18,7 +19,8 @@ import { useCategoriesStore } from '@/stores/CategoriesStore';
 import type { Categories } from '@/types/CategoriesInterface';
 import SpecialOffers from '@/components/SpecialOffers.vue';
 import { useProductsStore } from '@/stores/ProductsStore';
-import { type products } from '@/types/ProductsInterface';
+import { type productsType } from '@/types/ProductsInterface';
+import YouWillLike from '@/components/YouWillLike.vue';
 
 const bannersStore = useBannersStore();
 const banners = ref<Banners[]>([]);
@@ -27,17 +29,21 @@ const categoriesStore = useCategoriesStore();
 const categories = ref<Categories[]>([]);
 
 const productsStore = useProductsStore();
-const products = ref<products[]>([]);
+const productsSpecial = ref<productsType[]>([]);
+const productsWillLike = ref<productsType[]>([]);
 
 onMounted(async () => {
   await bannersStore.getBanners();
-  banners.value = bannersStore.banners;
-  await categoriesStore.getCategories();
-  categories.value = categoriesStore.categories;
-  await productsStore.getProducts();
-  products.value = productsStore.products;
-  console.log(products.value);
+    banners.value = bannersStore.banners;
+
+    await categoriesStore.getCategories();
+    categories.value = categoriesStore.categories;
+
+    await productsStore.getProducts();
+    productsSpecial.value = productsStore.productsSpecial;
+    productsWillLike.value = productsStore.productsWillLike;
 });
+
 </script>
 
 <style scoped></style>

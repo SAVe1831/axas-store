@@ -1,12 +1,14 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { type products, type filter } from '../types/ProductsInterface'
+import { type productsType, type filter } from '../types/ProductsInterface'
 import api from './api'
 
 export const useProductsStore = defineStore(
   'products',
   () => {
-    const products = ref<products[]>([])
+    const productsSpecial = ref<productsType[]>([])
+
+    const productsWillLike = ref<productsType[]>([])
     const getProducts = async (filters?: filter): Promise<void> => {
       try {
         const params: Record<string, any> = {};
@@ -27,14 +29,16 @@ export const useProductsStore = defineStore(
             params.flag_value = filters.flag_value;
           }
         }
-        const response = await api.post<{ data: products[] }>('/1/products/', { params })
-        products.value = response.data.data
-        console.log(products.value)
+        const responseSpecial = await api.post<{ data: productsType[] }>('/1/products/?is_special=true', { params })
+        productsSpecial.value = responseSpecial.data.data
+
+        const responseWillLike = await api.post<{ data: productsType[] }>('/1/products/?only_promotional=true', { params })
+        productsWillLike.value = responseWillLike.data.data
       } catch (error) {
         console.error(error)
       }
     }
-    return { products, getProducts }
+    return { productsSpecial, productsWillLike, getProducts }
   },
   {
     persist: true,

@@ -21,13 +21,18 @@
 <script setup lang="ts">
 import type { Categories } from '@/types/CategoriesInterface';
 
-const props = defineProps<{
+defineProps<{
   categories: Categories[]
 }>();
-console.log(props.categories);
 </script>
 
 <style scoped>
+
+.v-slide-group {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background-color: #F3F5F9;
+}
 
 .category-image-container {
   background-color: #F3F5F9;
@@ -41,17 +46,12 @@ console.log(props.categories);
 }
 
 .category-name {
-  font-size: 2.67vw;
-  line-height: 5.33vw;
+  font-size: 10px;
+  line-height: 20px;
   font-weight: 700;
+  letter-spacing: -0.2px;
   text-align: center;
   background-color: #F3F5F9;
   color: #1C1C1E;
-}
-
-.v-slide-group {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  background-color: #F3F5F9;
 }
 </style>
