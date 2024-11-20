@@ -15,3 +15,6 @@
   padding: 0px !important;
 }
 
+.v-selection-control > .v-selection-control__wrapper {
+  display: none;
+}
