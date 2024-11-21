@@ -16,9 +16,9 @@ export const useProductsStore = defineStore(
     const productsSorted = ref<productsType[]>([])
 
     const currentPage = ref(1)
-    const totalPages = ref(null)
-    const hasPrev = ref(null)
-    const hasNext = ref(null)
+    const totalPages = ref(0)
+    const hasPrev = ref(false)
+    const hasNext = ref(false)
 
     const sortStore = useSortStore()
 
@@ -77,8 +77,6 @@ export const useProductsStore = defineStore(
       hasPrev.value = responseSorted.data.meta.paginator.hasPrev
       hasNext.value = responseSorted.data.meta.paginator.hasNext
       currentPage.value = responseSorted.data.meta.paginator.page
-
-      console.log(currentPage.value, totalPages.value, hasPrev.value, hasNext.value)
 
       } catch (error) {
         console.error(error)

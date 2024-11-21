@@ -64,7 +64,7 @@
     </VContainer>
   </VContainer>
   <GetCatalog :catalog="catalog" />
-  <Pagination :current-page="currentPage" :total-page="totalPage" />
+  <Pagination :current-page="currentPage" :total-page="totalPage" :has-prev="hasPrev" :has-next="hasNext" />
 </template>
 
 <script setup lang="ts">
@@ -82,12 +82,16 @@ const productsStore = useProductsStore();
 
 const sortStore = useSortStore();
 
-const currentPage = ref(0);
+const currentPage = ref(1);
 const totalPage = ref(0);
+const hasPrev = ref(false);
+const hasNext = ref(false);
 
 const goBack = () => {
   window.history.go(-1);
 };
+
+
 
 const selectedOption = ref('popularity');
 const selectedSort = ref('Популярное');
@@ -107,6 +111,7 @@ const sorted = () => {
     selectedSort.value = 'По рейтингу';
   }
   sortStore.setSelectedSort(selectedOption.value);
+  productsStore.currentPage = 1;
   productsStore.getProductsSorted()
 }
 
@@ -119,6 +124,8 @@ onMounted(async () => {
   catalog.value = productsStore.productsSorted
   currentPage.value = productsStore.currentPage
   totalPage.value = productsStore.totalPages
+  hasPrev.value = productsStore.hasPrev
+  hasNext.value = productsStore.hasNext
   console.log(currentPage.value)
 })
 

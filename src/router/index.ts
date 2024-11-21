@@ -15,11 +15,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/filter',
     name: 'filter',
     component: () => import('../views/Filter.vue')
-  },
-  {
-    path: '/plant-type',
-    name: 'plant-type',
-    component: () => import('../views/PlantType.vue')
   }
 ]
 

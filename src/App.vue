@@ -1,7 +1,7 @@
 <template>
   <VApp>
     <VMain>
-      <RouterView />
+        <RouterView />
       <NavBottom />
     </VMain>
   </VApp>
@@ -10,8 +10,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import NavBottom from './components/NavBottom.vue';
+import { ref } from 'vue';
 
 const router = useRouter();
+
+const drawer = ref(false);
 
 </script>
 
