@@ -10,14 +10,13 @@
       <p class="filter-discount">Товары со скидкой</p>
       <VSpacer></VSpacer>
     </VContainer>
-    <VImg v-if="isDiscount" src="/public/switch-on-icon.svg" width="40" height="24" @click="isDiscount = !isDiscount">
-    </VImg>
-    <VImg v-else src="/public/switch-off-icon.svg" width="40" height="24" @click="isDiscount = !isDiscount"></VImg>
+    <VImg v-show="isDiscount" src="/public/switch-on-icon.svg" width="40" height="24" @click="isDiscount = !isDiscount"></VImg>
+    <VImg v-show="!isDiscount" src="/public/switch-off-icon.svg" width="40" height="24" @click="isDiscount = !isDiscount"></VImg>
   </VContainer>
   <VContainer class="pb-0">
     <p>Цена, ₽</p>
   </VContainer>
-  <VContainer class="mt-10">
+  <VContainer class="slider-container mt-10 pb-0">
     <v-range-slider v-model="range" :max="800" :min="0" :step="1" class="slider-range" color="#32AFC0" hide-details>
       <template v-slot:prepend>
         <v-text-field density="compact" class="text-field-start" type="number" variant="plain"
@@ -29,7 +28,7 @@
       </template>
     </v-range-slider>
   </VContainer>
-  <VContainer class="d-flex justify-space-between">
+  <VContainer class="d-flex justify-space-between pt-0">
     <VContainer class="pa-0">
       <p>Тип растения</p>
     </VContainer>
@@ -78,8 +77,12 @@ const range = ref([200, 800]);
   margin-left: 10px;
 }
 
+.slider-container {
+  height: ;
+}
+
 .slider-range {
-  height: 32.53vw;
+  height: 15.53vw;
   position: relative;
   margin: 0;
 }

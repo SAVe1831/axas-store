@@ -31,14 +31,14 @@
                     <img v-else src="/public/radio-button-no.svg" width="24" height="24" alt="" class="mr-1" @click="selectedOption = 'default'">
                   </div>
                   <div class="radio-container d-flex justify-space-between align-center" for="option3">
-                    <VRadio label="Подешевле" id="option3" value="-price"></VRadio>
-                    <img v-if="selectedOption === '-price'" src="/public/radio-button-yes.svg" width="24" height="24" alt="" class="mr-1">
-                    <img v-else src="/public/radio-button-no.svg" width="24" height="24" alt="" class="mr-1" @click="selectedOption = '-price'">
-                  </div>
-                  <div class="radio-container d-flex justify-space-between align-center" for="option4">
-                    <VRadio label="Подороже" id="option4" value="price"></VRadio>
+                    <VRadio label="Подешевле" id="option3" value="price"></VRadio>
                     <img v-if="selectedOption === 'price'" src="/public/radio-button-yes.svg" width="24" height="24" alt="" class="mr-1">
                     <img v-else src="/public/radio-button-no.svg" width="24" height="24" alt="" class="mr-1" @click="selectedOption = 'price'">
+                  </div>
+                  <div class="radio-container d-flex justify-space-between align-center" for="option4">
+                    <VRadio label="Подороже" id="option4" value="-price"></VRadio>
+                    <img v-if="selectedOption === '-price'" src="/public/radio-button-yes.svg" width="24" height="24" alt="" class="mr-1">
+                    <img v-else src="/public/radio-button-no.svg" width="24" height="24" alt="" class="mr-1" @click="selectedOption = '-price'">
                   </div>
                   <div class="radio-container d-flex justify-space-between align-center" for="option5">
                     <VRadio label="По рейтингу" id="option5" value="rating"></VRadio>
@@ -63,14 +63,27 @@
       </RouterLink>
     </VContainer>
   </VContainer>
+  <GetCatalog :catalog="catalog" />
+  <Pagination :current-page="currentPage" :total-page="totalPage" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import Input from '@/components/Input.vue';
 import { VContainer, VSpacer } from 'vuetify/components';
 import { RouterLink } from 'vue-router';
+import { useProductsStore } from '@/stores/ProductsStore';
+import { type productsType } from '@/types/ProductsInterface';
+import GetCatalog from '@/components/GetCatalog.vue';
+import { useSortStore } from '@/stores/SortStore';
+import Pagination from '@/components/Pagination.vue';
 
+const productsStore = useProductsStore();
+
+const sortStore = useSortStore();
+
+const currentPage = ref(0);
+const totalPage = ref(0);
 
 const goBack = () => {
   window.history.go(-1);
@@ -79,19 +92,36 @@ const goBack = () => {
 const selectedOption = ref('popularity');
 const selectedSort = ref('Популярное');
 
+const catalog = ref<productsType[]>([]);
+
 const sorted = () => {
   if (selectedOption.value === 'popularity') {
     selectedSort.value = 'Популярное';
   } else if (selectedOption.value === 'default') {
     selectedSort.value = 'Новинки';
-  } else if (selectedOption.value === '-price') {
-    selectedSort.value = 'Подешевле';
   } else if (selectedOption.value === 'price') {
+    selectedSort.value = 'Подешевле';
+  } else if (selectedOption.value === '-price') {
     selectedSort.value = 'Подороже';
   } else if (selectedOption.value === 'rating') {
     selectedSort.value = 'По рейтингу';
   }
+  sortStore.setSelectedSort(selectedOption.value);
+  productsStore.getProductsSorted()
 }
+
+watch(() => productsStore.productsSorted, () => {
+  catalog.value = productsStore.productsSorted;
+})
+
+onMounted(async () => {
+  await productsStore.getProductsSorted();
+  catalog.value = productsStore.productsSorted
+  currentPage.value = productsStore.currentPage
+  totalPage.value = productsStore.totalPages
+  console.log(currentPage.value)
+})
+
 </script>
 
 <style scoped>

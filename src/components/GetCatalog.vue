@@ -1,10 +1,7 @@
 <template>
-  <VContainer class="pb-0">
-    <p class="title">Вам понравится</p>
-  </VContainer>
   <VContainer class="d-flex flex-wrap justify-space-between ga-2">
-    <div v-for="product in productsWillLike" :key="product.id">
-      <VCard class="product-card ga-2 pa-2" width="44.27vw" height="70.4vw" color="#F3F5F9">
+    <div v-for="product in catalog" :key="product.id">
+      <VCard class="product-card ga-2 pa-2" width="44.27vw" height="81.6vw" color="#F3F5F9">
         <VImg width="41.07vw" height="43.73vw" cover :src="product?.thumbnail ? product?.thumbnail : ''"
           class="product-image" alt="Product Image">
           <img :src="favorites[product.id] ? '/public/favorites-icon-yes.svg' : '/public/favorites-icon-no.svg'"
@@ -22,6 +19,12 @@
           </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
           <div class="product-description overflow-hidden">{{ product.description }}</div>
         </div>
+        <VBtn v-if="!isProductChoosen[product.id]" color="#32AFC0" block class="rounded-lg" @click="addToCart(product.id)">В корзину</VBtn>
+        <div v-else class="button-alternate d-flex justify-space-between align-center">
+          <img src="/public/minus-grey-icon.svg" alt="minus" @click="decrease(product.id)">
+          <div class="button-alternate-counter">{{ counts[product.id] }}</div>
+          <img src="/public/plus-green-icon.svg" alt="plus" @click="increase(product.id)">
+        </div>
       </VCard>
     </div>
   </VContainer>
@@ -31,9 +34,8 @@
 import { ref } from 'vue';
 import type { productsType } from '@/types/ProductsInterface';
 
-
 defineProps<{
-  productsWillLike: productsType[]
+  catalog: productsType[]
 }>();
 
 const favorites = ref<Record<number, boolean>>({});
@@ -47,16 +49,29 @@ const getAgeSuffix = (feedback) => {
     return 'отзывов';
   }
 };
+
+const counts = ref<Record<number, number>>({});
+const isProductChoosen = ref<Record<number, boolean>>({});
+const addToCart = (productId) => {
+  isProductChoosen.value[productId] = true;
+  counts.value[productId] = counts.value[productId] || 1; // Устанавливаем начальное значение количества
+};
+
+const increase = (productId) => {
+  counts.value[productId]++;
+};
+
+const decrease = (productId) => {
+  if (counts.value[productId] > 1) {
+    counts.value[productId]--;
+  } else {
+    isProductChoosen.value[productId] = false; // Сбрасываем выбор, если количество меньше 1
+    delete counts.value[productId]; // Удаляем количество из объекта
+  }
+};
 </script>
 
 <style scoped>
-.title {
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-}
-
 .product-card {
   border-radius: 12px;
 }
@@ -94,5 +109,13 @@ const getAgeSuffix = (feedback) => {
   height: 9.07vw;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.button-alternate {
+  width: 100%;
+  height: 9.6vw;
+  border-radius: 8px;
+  background-color: #1C1C1E1A;
+  padding: 6px 4px;
 }
 </style>

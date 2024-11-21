@@ -50,4 +50,13 @@ interface productsType {
   }
 }
 
-export type { filter, productsType }
+interface meta {
+  paginator: {
+    hasPrev: boolean | null;
+    hasNext: boolean | null;
+    page: number | null;
+    total: number | null;
+  }
+}
+
+export type { filter, productsType, meta }
