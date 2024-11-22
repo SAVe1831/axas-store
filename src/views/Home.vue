@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Input />
+    <Input placeholder-text="Поиск" bg-color="white" />
     <SliderBanner :banners="banners" />
     <SliderCategory :categories="categories" />
     <SpecialOffers :productsSpecial="productsSpecial" />

@@ -24,11 +24,10 @@ const props = defineProps<{
 
 const page = ref(1);
 
-console.log(page.value)
-
 const newPage = () => {
   productsStore.currentPage = page.value
   productsStore.getProductsSorted();
+  window.scrollTo(0, 0);
 }
 
 watch(() => props.currentPage, (newPage) => {

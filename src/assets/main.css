@@ -18,3 +18,7 @@
 .v-selection-control > .v-selection-control__wrapper {
   display: none;
 }
+
+.checkbox-container > .v-input > .v-input__control > .v-selection-control > .v-label {
+  opacity: 1;
+}

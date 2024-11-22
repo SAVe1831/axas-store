@@ -1,7 +1,7 @@
 <template>
   <VContainer class="d-flex align-center ga-3">
     <VIcon size="24" @click="goBack">mdi-chevron-left</VIcon>
-    <Input class="pa-0" />
+    <Input class="pa-0" :placeholder-text="'Поиск'" bg-color="white" />
   </VContainer>
   <VContainer>
     <p class="special-offer-title">Спецпредложения</p>
@@ -64,7 +64,7 @@
     </VContainer>
   </VContainer>
   <GetCatalog :catalog="catalog" />
-  <Pagination :current-page="currentPage" :total-page="totalPage" :has-prev="hasPrev" :has-next="hasNext" />
+  <Pagination v-if="catalog.length > 0" :current-page="currentPage" :total-page="totalPage" :has-prev="hasPrev" :has-next="hasNext" />
 </template>
 
 <script setup lang="ts">
@@ -126,7 +126,6 @@ onMounted(async () => {
   totalPage.value = productsStore.totalPages
   hasPrev.value = productsStore.hasPrev
   hasNext.value = productsStore.hasNext
-  console.log(currentPage.value)
 })
 
 </script>
