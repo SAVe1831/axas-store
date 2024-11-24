@@ -5,7 +5,7 @@
           <VIcon><VImg src="/nav-bottom-icon-home.svg" alt="Home"></VImg></VIcon>
         </VBtn>
 
-        <VBtn color="#32AFC0">
+        <VBtn to="/catalog" color="#32AFC0">
           <VIcon><VImg src="/nav-bottom-icon-catalog.svg" alt="Catalog"></VImg></VIcon>
         </VBtn>
 

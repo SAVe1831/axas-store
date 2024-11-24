@@ -19,14 +19,15 @@
     <p>Цена, ₽</p>
   </VContainer>
   <VContainer class="slider-container mt-10 pb-0">
-    <VRangeSlider v-model="range" :max="800" :min="0" :step="1" class="slider-range" color="#32AFC0" hide-details>
+    <VRangeSlider v-model="rangePrice" :max="800" :min="0" :step="1" class="slider-range-price" color="#32AFC0"
+      hide-details>
       <template v-slot:prepend>
-        <v-text-field density="compact" class="text-field-start" type="number" variant="plain" hide-details
-          single-line>от {{ range[0] }}</v-text-field>
+        <VTextField density="compact" class="text-field-start" type="number" variant="plain" hide-details single-line>от
+          {{ rangePrice[0] }}</VTextField>
       </template>
       <template v-slot:append>
-        <v-text-field density="compact" class="text-field-end" type="number" variant="plain" hide-details single-line>до
-          {{ range[1] }} </v-text-field>
+        <VTextField density="compact" class="text-field-end" type="number" variant="plain" hide-details single-line>до
+          {{ rangePrice[1] }} </VTextField>
       </template>
     </VRangeSlider>
   </VContainer>
@@ -66,6 +67,38 @@
       </li>
     </ul>
   </VContainer>
+  <VContainer class="pt-0">
+    <p class="plant-height">Высота, см</p>
+    <div class="d-flex justify-space-between pt-2">
+      <VTextField class="text-field-height-start" density="compact" type="number" variant="plain" hide-details
+        single-line v-model="rangeHeight[0]">от </VTextField>
+      <VTextField class="text-field-height-end" density="compact" type="number" variant="plain" hide-details single-line
+        v-model="rangeHeight[1]">до </VTextField>
+    </div>
+  </VContainer>
+  <VContainer class="py-0">
+    <p class="plant-diameter">Диаметр, см</p>
+    <div class="d-flex justify-space-between pt-2">
+      <VTextField class="text-field-diameter-start" density="compact" type="number" variant="plain" hide-details
+        single-line v-model="rangeDiameter[0]">от </VTextField>
+      <VTextField class="text-field-diameter-end" density="compact" type="number" variant="plain" hide-details
+        single-line v-model="rangeDiameter[1]">до </VTextField>
+    </div>
+  </VContainer>
+  <VContainer class="d-flex justify-space-between">
+    <VContainer class="d-flex align-center justify-start pa-0">
+      <p class="filter-markdown ml-0">Уценённые товары</p>
+      <VSpacer></VSpacer>
+    </VContainer>
+    <VImg v-show="isMarkdown" src="/public/switch-on-icon.svg" width="40" height="24" @click="isMarkdown = !isMarkdown">
+    </VImg>
+    <VImg v-show="!isMarkdown" src="/public/switch-off-icon.svg" width="40" height="24"
+      @click="isMarkdown = !isMarkdown">
+    </VImg>
+  </VContainer>
+  <VContainer class="pt-0">
+    <VBtn class="apply-button" variant="tonal" width="100%" @click="sorted(), isActive.value = false">Применить</VBtn>
+  </VContainer>
 </template>
 
 <script setup lang="ts">
@@ -78,15 +111,21 @@ const goBack = () => {
   window.history.go(-1);
 };
 
-const isDiscount = ref(true);
+const isDiscount = ref(false);
 
 const isActive = ref(false);
 
-const range = ref([200, 800]);
+const rangePrice = ref([200, 800]);
 
 const categories = ref([]);
 
 const selectedCategories = ref([]);
+
+const rangeHeight = ref([10, 150]);
+
+const rangeDiameter = ref([10, 50]);
+
+const isMarkdown = ref(false);
 
 const updateSelected = (selected) => {
   selectedCategories.value = selected;
@@ -95,7 +134,6 @@ const updateSelected = (selected) => {
 onMounted(async () => {
   await categoriesStore.getCategories();
   categories.value = categoriesStore.categories;
-  console.log(categories.value);
 })
 </script>
 
@@ -115,7 +153,7 @@ onMounted(async () => {
   color: #0C663B66;
 }
 
-.filter-discount {
+.filter-discount, .filter-markdown {
   font-size: 16px;
   line-height: 20px;
   font-weight: 400;
@@ -123,7 +161,7 @@ onMounted(async () => {
   margin-left: 10px;
 }
 
-.slider-range {
+.slider-range-price {
   height: 15.53vw;
   position: relative;
   margin: 0;
@@ -136,7 +174,7 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 8px 15px;
   position: absolute;
-  top: -45px;
+  top: -12vw;
   left: 0;
   color: #1C1C1E66;
 }
@@ -148,7 +186,7 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 8px 15px;
   position: absolute;
-  top: -45px;
+  top: -12vw;
   right: 0;
   color: #1C1C1E66;
 }
@@ -175,4 +213,23 @@ onMounted(async () => {
   flex-wrap: wrap;
   gap: 4px;
 }
+
+.text-field-height-start,
+.text-field-height-end,
+.text-field-diameter-start,
+.text-field-diameter-end {
+  max-width: 48%;
+  height: 12.8vw;
+  background-color: white;
+  border-radius: 8px;
+  padding: 8px 15px;
+  color: #1C1C1E66;
+}
+
+.apply-button {
+  background-color: #32AFC0;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
 </style>

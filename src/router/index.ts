@@ -9,12 +9,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/catalog',
     name: 'catalog',
-    component: () => import('../views/Catalog.vue')
+    component: () => import('../views/SpecialOffersMore.vue')
   },
   {
     path: '/filter',
     name: 'filter',
     component: () => import('../views/Filter.vue')
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: () => import('../views/CatalogCategory.vue')
   }
 ]
 

@@ -1,7 +1,7 @@
 <template>
-  <VContainer class="d-flex flex-wrap justify-space-between ga-2">
+  <VContainer class="d-flex flex-wrap justify-space-between ga-1">
     <div v-for="product in catalog" :key="product.id">
-      <VCard class="product-card ga-2 pa-2" width="44.27vw" height="81.6vw" color="#F3F5F9">
+      <VCard class="product-card ga-2 pa-2" width="44vw" height="85vw" color="#F3F5F9">
         <VImg width="41.07vw" height="43.73vw" cover :src="product?.thumbnail ? product?.thumbnail : ''"
           class="product-image" alt="Product Image">
           <img :src="favorites[product.id] ? '/public/favorites-icon-yes.svg' : '/public/favorites-icon-no.svg'"
@@ -19,7 +19,7 @@
           </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
           <div class="product-description overflow-hidden">{{ product.description }}</div>
         </div>
-        <VBtn v-if="!isProductChoosen[product.id]" color="#32AFC0" block class="rounded-lg" @click="addToCart(product.id)">В корзину</VBtn>
+        <VBtn v-if="!isProductChoosen[product.id]" color="#32AFC0" block class="rounded-lg mt-1" @click="addToCart(product.id)">В корзину</VBtn>
         <div v-else class="button-alternate d-flex justify-space-between align-center">
           <img src="/public/minus-grey-icon.svg" alt="minus" @click="decrease(product.id)">
           <div class="button-alternate-counter">{{ counts[product.id] }}</div>
