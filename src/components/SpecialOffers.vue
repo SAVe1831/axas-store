@@ -2,8 +2,8 @@
   <VContainer class="special-offer-container bg-white w-100 h-auto d-flex flex-column">
     <div class="d-flex justify-space-between align-center">
       <p class="special-offer-title">Спецпредложения</p>
-      <RouterLink to="/catalog" class="more-link">
-        <div class="special-offer-more d-flex align-center">
+      <RouterLink to="/special-offers-more" class="more-link">
+        <div class="special-offers-more d-flex align-center">
         <p>Ещё</p>
           <VIcon class="more-icon" size="24">mdi-chevron-right</VIcon>
         </div>
@@ -74,13 +74,13 @@ const getAgeSuffix = (feedback) => {
   letter-spacing: -0.2px;
 }
 
-.special-offer-more p {
+.special-offers-more p {
   font-size: 14px;
   line-height: 18px;
   color: #32AFC0;
 }
 
-.special-offer-more>.more-icon {
+.special-offers-more>.more-icon {
   color: #32AFC0;
 }
 

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { type productsType, type filter, type meta } from '../types/ProductsInterface'
+import { type productsType, type filter } from '../types/ProductsInterface'
 import api from './api'
 import { useSortStore } from './SortStore'
 
@@ -84,7 +84,7 @@ export const useProductsStore = defineStore(
     }
     return { productsSpecial, productsWillLike, productsSorted, hasPrev, hasNext, currentPage, totalPages, getProducts, getProductsSorted }
   },
-  // {
-  //   persist: true,
-  // }
+  {
+    persist: true,
+  }
 )

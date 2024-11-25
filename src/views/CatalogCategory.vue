@@ -3,7 +3,7 @@
         <Input placeholder-text="Поиск" bg-color="white" />
         <VContainer class="pt-0">
             <div v-for="category in categories" :key="category.id ?? 'default-key'">
-                <VCard elevation="0" width="100%" height="19.2vw" class="category-image-container d-flex justify-start align-center ga-4">
+                <VCard @click="$router.push(`/catalog-category/${category.id}`)" elevation="0" width="100%" height="19.2vw" class="category-image-container d-flex justify-start align-center ga-4">
                     <div v-if="category.thumbnail?.includes('http')" class="image-container d-flex fill-height align-center justify-center">
                         <img :src="category.thumbnail" alt="Category Image" class="category-image" />
                     </div>

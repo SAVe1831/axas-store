@@ -32,7 +32,6 @@ const newPage = () => {
 
 watch(() => props.currentPage, (newPage) => {
   page.value = newPage
-  console.log(page.value)
 })
 
 </script>

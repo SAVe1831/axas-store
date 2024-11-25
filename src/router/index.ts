@@ -7,8 +7,8 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/catalog',
-    name: 'catalog',
+    path: '/special-offers-more',
+    name: 'special-offers-more',
     component: () => import('../views/SpecialOffersMore.vue')
   },
   {
@@ -17,9 +17,26 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Filter.vue')
   },
   {
-    path: '/catalog',
-    name: 'catalog',
+    path: '/catalog-category',
+    name: 'catalog-category',
     component: () => import('../views/CatalogCategory.vue')
+  },
+  {
+    path: '/catalog-category/:id',
+    name: 'catalog-subcategory',
+    component: () => import('../views/CatalogSubCategory.vue'),
+    props: true
+  },
+  {
+    path: '/catalog-subcategory-details/:subCategoryId',
+    name: 'catalog-subcategory-details',
+    component: () => import('../views/CatalogSubCategoryDetails.vue'),
+    props: true
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('../views/Cart.vue')
   }
 ]
 

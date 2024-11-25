@@ -11,7 +11,7 @@
         <div class="product-info mt-2">
           <div class="feedbacks w-100 h-auto d-flex justify-start align-center">
             <img src="/public/star-icon.svg" alt="Rating">
-            <div class="ml-1">{{ product.rating || 0 }}</div>
+            <div class="ml-1">{{ product.rating?.toFixed(1) || 0 }}</div>
             <img src="/public/dot-icon.svg" alt="">
             <div>{{ product.totalFeedbackCount }} {{ getAgeSuffix(product.totalFeedbackCount) }}</div>
           </div>
