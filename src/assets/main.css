@@ -22,3 +22,7 @@
 .checkbox-container > .v-input > .v-input__control > .v-selection-control > .v-label {
   opacity: 1;
 }
+
+.text-field-promocode > .v-input__control > .v-field > .v-field__field > .v-field__input {
+  padding: 4px 16px !important;
+}

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import Input from '../components/Input.vue';
 import SliderBanner from '../components/SliderBanner.vue';
 import { useBannersStore } from '@/stores/BannersStore';
@@ -31,6 +31,11 @@ const categories = ref<Categories[]>([]);
 const productsStore = useProductsStore();
 const productsSpecial = ref<productsType[]>([]);
 const productsWillLike = ref<productsType[]>([]);
+
+watch(() => productsStore.searchQuery, async () => {
+  await productsStore.getProducts();
+  productsWillLike.value = productsStore.productsWillLike;
+})
 
 onMounted(async () => {
   await bannersStore.getBanners();

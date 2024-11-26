@@ -54,7 +54,8 @@ const counts = ref<Record<number, number>>({});
 const isProductChoosen = ref<Record<number, boolean>>({});
 const addToCart = (productId) => {
   isProductChoosen.value[productId] = true;
-  counts.value[productId] = counts.value[productId] || 1; // Устанавливаем начальное значение количества
+  counts.value[productId] = counts.value[productId] || 1;
+  cartStore.addToCart(productId, counts.value[productId]);
 };
 
 const increase = (productId) => {
@@ -65,8 +66,9 @@ const decrease = (productId) => {
   if (counts.value[productId] > 1) {
     counts.value[productId]--;
   } else {
-    isProductChoosen.value[productId] = false; // Сбрасываем выбор, если количество меньше 1
-    delete counts.value[productId]; // Удаляем количество из объекта
+    isProductChoosen.value[productId] = false;
+    delete counts.value[productId];
+    cartStore.removeFromCart(productId);
   }
 };
 </script>

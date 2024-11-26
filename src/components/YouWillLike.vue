@@ -14,7 +14,7 @@
         <div class="product-info mt-2">
           <div class="feedbacks w-100 h-auto d-flex justify-start align-center">
             <img src="/public/star-icon.svg" alt="Rating">
-            <div class="ml-1">{{ product.rating || 0 }}</div>
+            <div class="ml-1">{{ product.rating?.toFixed(1) || 0 }}</div>
             <img src="/public/dot-icon.svg" alt="">
             <div>{{ product.totalFeedbackCount }} {{ getAgeSuffix(product.totalFeedbackCount) }}</div>
           </div>
@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { productsType } from '@/types/ProductsInterface';
 
 
-defineProps<{
+const props = defineProps<{
   productsWillLike: productsType[]
 }>();
 
@@ -47,6 +47,10 @@ const getAgeSuffix = (feedback) => {
     return 'отзывов';
   }
 };
+
+watch(() => props.productsWillLike, (newVal, oldVal) => {
+  console.log('productsWillLike изменился:', newVal);
+}, { deep: true });
 </script>
 
 <style scoped>

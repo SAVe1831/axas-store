@@ -22,6 +22,13 @@ export const useProductsStore = defineStore(
 
     const sortStore = useSortStore()
 
+    const searchQuery = ref<string>('');
+    const resultsQuery = ref([]);
+
+    const updateSearchQuery = async (query: string) => {
+      searchQuery.value = query;
+    };
+
     const getProducts = async (filters?: filter): Promise<void> => {
       try {
         const params: Record<string, any> = {};
@@ -45,8 +52,9 @@ export const useProductsStore = defineStore(
         const responseSpecial = await api.post<{ data: productsType[] }>('/1/products/?is_special=true', { params })
         productsSpecial.value = responseSpecial.data.data
 
-        const responseWillLike = await api.post<{ data: productsType[] }>('/1/products/?only_promotional=true', { params })
+        const responseWillLike = await api.post<{ data: productsType[] }>(`/1/products/?only_promotional=true&name=${searchQuery.value}`, { params })
         productsWillLike.value = responseWillLike.data.data
+        console.log(productsWillLike.value)
       } catch (error) {
         console.error(error)
       }
@@ -82,9 +90,9 @@ export const useProductsStore = defineStore(
         console.error(error)
       }
     }
-    return { productsSpecial, productsWillLike, productsSorted, hasPrev, hasNext, currentPage, totalPages, getProducts, getProductsSorted }
+    return { productsSpecial, productsWillLike, productsSorted, hasPrev, hasNext, currentPage, totalPages, getProducts, getProductsSorted, searchQuery, resultsQuery, updateSearchQuery }
   },
-  {
-    persist: true,
-  }
+  // {
+  //   persist: true,
+  // }
 )
