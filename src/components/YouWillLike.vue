@@ -20,7 +20,7 @@
           </div>
           <span :style="{ color: product.oldPrice ? '#D22121' : '#000000' }" class="product-price">{{ product.price }} ₽
           </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
-          <div class="product-description overflow-hidden">{{ product.description }}</div>
+          <div class="product-description overflow-hidden">{{ product.name }}</div>
         </div>
       </VCard>
     </div>
@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import type { productsType } from '@/types/ProductsInterface';
 
 
-const props = defineProps<{
+defineProps<{
   productsWillLike: productsType[]
 }>();
 
@@ -47,10 +47,6 @@ const getAgeSuffix = (feedback) => {
     return 'отзывов';
   }
 };
-
-watch(() => props.productsWillLike, (newVal, oldVal) => {
-  console.log('productsWillLike изменился:', newVal);
-}, { deep: true });
 </script>
 
 <style scoped>

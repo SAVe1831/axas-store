@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useCategoriesStore } from '@/stores/CategoriesStore';
 import Input from '../components/Input.vue';
 
@@ -25,7 +25,15 @@ const categoriesStore = useCategoriesStore();
 
 const categories = ref([]);
 
+watch(() => categoriesStore.searchQuery, async () => {
+    await categoriesStore.getCategories();
+    categories.value = categoriesStore.categories
+    console.log(categoriesStore.searchQuery, categories.value);
+
+});
+
 onMounted(async () => {
+    categoriesStore.updateSearchQuery('');
     await categoriesStore.getCategories();
     categories.value = categoriesStore.categories;
 });

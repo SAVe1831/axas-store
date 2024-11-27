@@ -2,6 +2,25 @@
   <VContainer>
     <p class="cart-title">Корзина</p>
   </VContainer>
+  <VContainer>
+    <div v-if="cart.length === 0">
+      <h2>Корзина пуста</h2>
+    </div>
+    <div v-else>
+      <VCard v-for="product in cart" :key="product.id" color="#F3F5F9" elevation="0" class="cart-card d-flex justify-start align-center ga-3">
+        <img :src="product.thumbnail" alt="Product Image" class="cart-product-image"/>
+        <div class="cart-product-info w-100">
+          <div>{{ product.name }}</div>
+          <div>Цена: {{ product.price }} ₽</div>
+          <div>Количество: {{ product.quantity }}</div>
+          <VBtn @click="removeFromCart(product)">Удалить</VBtn>
+        </div>
+      </VCard>
+      <div class="cart-total">
+        <strong>Итого: {{ totalPrice }} ₽</strong>
+      </div>
+    </div>
+  </VContainer>
   <VContainer class="bg-white rounded-xl">
     <p class="cart-promocode-title">Введите промокод</p>
     <VContainer class="d-flex justify-space-between ga-1 px-0">
@@ -31,8 +50,8 @@
       </div>
     </VContainer>
     <VContainer class="d-flex justify-space-between align-center px-0">
-      <img v-if="isApplyRules" src="/public/checkbox-icon-yes.svg" @click="isApplyRules = !isApplyRules">
-      <img v-else src="/public/checkbox-icon-no.svg" @click="isApplyRules = !isApplyRules">
+      <img v-show="isApplyRules" src="/public/checkbox-icon-yes.svg" @click="isApplyRules = !isApplyRules">
+      <img v-show="!isApplyRules" src="/public/checkbox-icon-no.svg" @click="isApplyRules = !isApplyRules">
       <input type="checkbox" class="rules-checkbox ml-2" v-model="isApplyRules">
       <label class="ml-2" @click="isApplyRules = !isApplyRules">Согласен с <RouterLink to="/rules" class="rules-link">Правилами пользования торговой площадкой и правилами возврата</RouterLink></label>
     </VContainer>
@@ -48,7 +67,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useCartStore } from '@/stores/CartStore';
+
+const cartStore = useCartStore();
+
+const cart = cartStore.cart;
+
+const removeFromCart = (product) => {
+  cartStore.removeFromCart(product);
+};
+
+const totalPrice = computed(() => {
+  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+});
 
 const promoCode = ref('');
 
@@ -63,6 +95,11 @@ const isApplyRules = ref(false);
   line-height: 34px;
   font-weight: 600;
   letter-spacing: 0.37px;
+}
+
+.cart-product-image {
+  width: 28.27vw;
+  height: 28.27vw;
 }
 
 .cart-promocode-title,

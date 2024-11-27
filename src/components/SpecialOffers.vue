@@ -28,7 +28,7 @@
               </div>
               <span :style="{ color: product.oldPrice ? '#D22121' : '#000000' }" class="product-price">{{ product.price }} ₽
               </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
-              <div class="product-description overflow-hidden">{{ product.description }}</div>
+              <div class="product-description overflow-hidden">{{ product.name }}</div>
             </div>
           </VCard>
         </VSlide-group-item>

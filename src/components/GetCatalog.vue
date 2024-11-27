@@ -17,10 +17,10 @@
           </div>
           <span :style="{ color: product.oldPrice ? '#D22121' : '#000000' }" class="product-price">{{ product.price }} ₽
           </span><span class="product-old-price"> {{ product.oldPrice ? `${product.oldPrice} ₽` : '' }}</span>
-          <div class="product-description overflow-hidden">{{ product.description }}</div>
+          <div class="product-description overflow-hidden">{{ product.name }}</div>
         </div>
-        <VBtn v-if="!isProductChoosen[product.id]" color="#32AFC0" block class="rounded-lg mt-1" @click="addToCart(product.id)">В корзину</VBtn>
-        <div v-else class="button-alternate d-flex justify-space-between align-center">
+        <VBtn v-if="!isProductChoosen[product.id]" color="#32AFC0" block class="rounded-lg mt-1" @click="() => addToCart(product)">В корзину</VBtn>
+        <div v-else class="button-alternate d-flex justify-space-between align-center mt-1">
           <img src="/public/minus-grey-icon.svg" alt="minus" @click="decrease(product.id)">
           <div class="button-alternate-counter">{{ counts[product.id] }}</div>
           <img src="/public/plus-green-icon.svg" alt="plus" @click="increase(product.id)">
@@ -33,6 +33,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { productsType } from '@/types/ProductsInterface';
+import { useCartStore } from '@/stores/CartStore';
+
+const cartStore = useCartStore();
 
 defineProps<{
   catalog: productsType[]
@@ -52,14 +55,23 @@ const getAgeSuffix = (feedback) => {
 
 const counts = ref<Record<number, number>>({});
 const isProductChoosen = ref<Record<number, boolean>>({});
-const addToCart = (productId) => {
-  isProductChoosen.value[productId] = true;
-  counts.value[productId] = counts.value[productId] || 1;
-  cartStore.addToCart(productId, counts.value[productId]);
+
+const addToCart = (product) => {
+  if (product) {
+    isProductChoosen.value[product.id] = true;
+    counts.value[product.id] = counts.value[product.id] || 1;
+    cartStore.addToCart(product);
+  }
 };
 
 const increase = (productId) => {
-  counts.value[productId]++;
+  const product = cartStore.cart.find(item => item.id === productId);
+  if (product) {
+    product.quantity++; // Увеличиваем quantity в корзине
+  } else {
+    console.error('Product not found in cart'); // Это не должно происходить, если логика работает правильно
+  }
+  counts.value[productId]++; // Также обновляем локальное состояние, если это необходимо
 };
 
 const decrease = (productId) => {
@@ -68,7 +80,12 @@ const decrease = (productId) => {
   } else {
     isProductChoosen.value[productId] = false;
     delete counts.value[productId];
-    cartStore.removeFromCart(productId);
+  }
+  const product = cartStore.cart.find(item => item.id === productId);
+  if (product && product.quantity > 1) {
+    product.quantity--;
+  } else {
+    cartStore.removeFromCart(product);
   }
 };
 </script>

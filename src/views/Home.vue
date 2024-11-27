@@ -38,15 +38,17 @@ watch(() => productsStore.searchQuery, async () => {
 })
 
 onMounted(async () => {
+  productsStore.updateSearchQuery('');
+
   await bannersStore.getBanners();
-    banners.value = bannersStore.banners;
+  banners.value = bannersStore.banners;
 
-    await categoriesStore.getCategories();
-    categories.value = categoriesStore.categories;
+  await categoriesStore.getCategories();
+  categories.value = categoriesStore.categories;
 
-    await productsStore.getProducts();
-    productsSpecial.value = productsStore.productsSpecial;
-    productsWillLike.value = productsStore.productsWillLike;
+  await productsStore.getProducts();
+  productsSpecial.value = productsStore.productsSpecial;
+  productsWillLike.value = productsStore.productsWillLike;
 });
 
 </script>

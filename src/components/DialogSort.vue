@@ -92,6 +92,7 @@ const sorted = () => {
   }
   sortStore.setSelectedSort(selectedOption.value);
   productsStore.currentPage = 1;
+  productsStore.updateSearchQuery('');
   productsStore.getProductsSorted()
 }
 

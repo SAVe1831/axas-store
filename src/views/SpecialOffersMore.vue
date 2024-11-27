@@ -10,17 +10,16 @@
     <DialogSort />
     <VContainer>
       <RouterLink to="/filter">
-        <VContainer class="d-flex align-center w-10 pa-0 ma-0">
+        <VContainer class="d-flex align-center pa-0 ma-0">
           <VSpacer></VSpacer>
-          <img src="/public/filter-icon.svg" alt="Filter" width="18" height="18"></img>
+          <img src="/public/filter-icon.svg" alt="Filter" width="18" height="18">
           <p style="color: #000000;">Фильтры</p>
         </VContainer>
       </RouterLink>
     </VContainer>
   </div>
   <GetCatalog :catalog="catalog" />
-  <Pagination v-if="catalog.length > 0" :current-page="currentPage" :total-page="totalPage" :has-prev="hasPrev"
-    :has-next="hasNext" />
+  <Pagination v-if="catalog.length > 0" :current-page="currentPage" :total-page="totalPage" :has-prev="hasPrev" :has-next="hasNext" />
 </template>
 
 <script setup lang="ts">
@@ -33,6 +32,9 @@ import { type productsType } from '@/types/ProductsInterface';
 import GetCatalog from '@/components/GetCatalog.vue';
 import Pagination from '@/components/Pagination.vue';
 import DialogSort from '@/components/dialogSort.vue';
+import { useProductsFilterStore } from '@/stores/ProductsFilterStore';
+
+const productsFilterStore = useProductsFilterStore();
 
 const productsStore = useProductsStore();
 
@@ -51,7 +53,13 @@ watch(() => productsStore.productsSorted, () => {
   catalog.value = productsStore.productsSorted;
 })
 
+watch(() => productsStore.searchQuery, async () => {
+  await productsStore.getProductsSorted();
+  catalog.value = productsStore.productsSorted;
+})
+
 onMounted(async () => {
+  productsStore.updateSearchQuery('');
   await productsStore.getProductsSorted();
   catalog.value = productsStore.productsSorted
   currentPage.value = productsStore.currentPage

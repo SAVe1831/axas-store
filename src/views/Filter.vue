@@ -2,7 +2,7 @@
   <VContainer class="d-flex justify-space-between align-baseline ga-3">
     <VIcon size="24" @click="goBack">mdi-chevron-left</VIcon>
     <p class="filter-title">Фильтры</p>
-    <p class="filter-clear">Очистить</p>
+    <p class="filter-clear" @click="clearFilters">Очистить</p>
   </VContainer>
   <VContainer class="d-flex justify-space-between">
     <VContainer class="d-flex align-center justify-start pa-0">
@@ -19,15 +19,15 @@
     <p>Цена, ₽</p>
   </VContainer>
   <VContainer class="slider-container mt-10 pb-0">
-    <VRangeSlider v-model="rangePrice" :max="800" :min="0" :step="1" class="slider-range-price" color="#32AFC0"
+    <VRangeSlider v-model="rangePrice" :max="800000" :min="0" :step="1" class="slider-range-price" color="#32AFC0"
       hide-details>
       <template v-slot:prepend>
-        <VTextField density="compact" class="text-field-start" type="number" variant="plain" hide-details single-line>от
-          {{ rangePrice[0] }}</VTextField>
+        <VTextField v-model.number="rangePrice[0]" density="compact" class="text-field-start" type="number" variant="plain" hide-details single-line>от
+          </VTextField>
       </template>
       <template v-slot:append>
-        <VTextField density="compact" class="text-field-end" type="number" variant="plain" hide-details single-line>до
-          {{ rangePrice[1] }} </VTextField>
+        <VTextField v-model.number="rangePrice[1]" density="compact" class="text-field-end" type="number" variant="plain" hide-details single-line>до
+           </VTextField>
       </template>
     </VRangeSlider>
   </VContainer>
@@ -97,7 +97,7 @@
     </VImg>
   </VContainer>
   <VContainer class="pt-0">
-    <VBtn class="apply-button" variant="tonal" width="100%" @click="sorted(), isActive.value = false">Применить</VBtn>
+    <VBtn class="apply-button" variant="tonal" width="100%" @click="applyFilters">Применить</VBtn>
   </VContainer>
 </template>
 
@@ -105,17 +105,23 @@
 import PlantsTypeDialog from '@/components/PlantsTypeDialog.vue';
 import { onMounted, ref } from 'vue';
 import { useCategoriesStore } from '@/stores/CategoriesStore';
+import { useProductsFilterStore } from '@/stores/ProductsFilterStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const productsFilterStore = useProductsFilterStore();
 
 const categoriesStore = useCategoriesStore();
 const goBack = () => {
   window.history.go(-1);
 };
 
-const isDiscount = ref(false);
-
 const isActive = ref(false);
 
-const rangePrice = ref([200, 800]);
+const isDiscount = ref(false);
+
+const rangePrice = ref([0, 800000]);
 
 const categories = ref([]);
 
@@ -131,7 +137,33 @@ const updateSelected = (selected) => {
   selectedCategories.value = selected;
 };
 
+const clearFilters = () => {
+  isDiscount.value = false;
+  rangePrice.value = [0, 800000];
+  rangeHeight.value = [10, 150];
+  rangeDiameter.value = [10, 50];
+  isMarkdown.value = false;
+}
+
+const applyFilters = () => {
+  productsFilterStore.upDateIsDiscount(isDiscount.value);
+  productsFilterStore.upDateRangeValueFrom(rangePrice.value[0]);
+  productsFilterStore.upDateRangeValueTo(rangePrice.value[1]);
+  productsFilterStore.upDateHeightMin(rangeHeight.value[0]);
+  productsFilterStore.upDateHeightMax(rangeHeight.value[1]);
+  productsFilterStore.upDateDiameterMin(rangeDiameter.value[0]);
+  productsFilterStore.upDateDiameterMax(rangeDiameter.value[1]);
+  productsFilterStore.upDateIsMarkdown(isMarkdown.value);
+  isActive.value = false
+  router.push('/special-offers-more');
+}
+
 onMounted(async () => {
+  isDiscount.value = productsFilterStore.isDiscount;
+  rangePrice.value = [productsFilterStore.range_value_from, productsFilterStore.range_value_to];
+  rangeHeight.value = [productsFilterStore.heightMin, productsFilterStore.heightMax];
+  rangeDiameter.value = [productsFilterStore.diameterMin, productsFilterStore.diameterMax];
+  isMarkdown.value = productsFilterStore.isMarkdown;
   await categoriesStore.getCategories();
   categories.value = categoriesStore.categories;
 })
@@ -151,6 +183,10 @@ onMounted(async () => {
   font-weight: 600;
   letter-spacing: -0.2px;
   color: #0C663B66;
+}
+
+.filter-clear:active {
+  color: #32AFC0;
 }
 
 .filter-discount, .filter-markdown {

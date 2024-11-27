@@ -5,8 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import { useProductsStore } from '@/stores/ProductsStore';
+import { useCategoriesStore } from '@/stores/CategoriesStore';
+
+const categoriesStore = useCategoriesStore();
 
 const productsStore = useProductsStore();
 
@@ -19,7 +22,16 @@ const searchQuery = ref('');
 
 const search = () => {
   productsStore.updateSearchQuery(searchQuery.value);
+  categoriesStore.updateSearchQuery(searchQuery.value)
 }
+
+watch(() => productsStore.searchQuery, () => {
+  searchQuery.value = productsStore.searchQuery
+})
+
+watch(() => categoriesStore.searchQuery, () => {
+  searchQuery.value = categoriesStore.searchQuery
+})
 
 </script>
 

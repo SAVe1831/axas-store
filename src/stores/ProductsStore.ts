@@ -3,12 +3,16 @@ import { defineStore } from 'pinia'
 import { type productsType, type filter } from '../types/ProductsInterface'
 import api from './api'
 import { useSortStore } from './SortStore'
+import { useProductsFilterStore } from './ProductsFilterStore'
 
 
 
 export const useProductsStore = defineStore(
   'products',
   () => {
+    const sortStore = useSortStore()
+    const productsFilterStore = useProductsFilterStore()
+
     const productsSpecial = ref<productsType[]>([])
 
     const productsWillLike = ref<productsType[]>([])
@@ -20,79 +24,37 @@ export const useProductsStore = defineStore(
     const hasPrev = ref(false)
     const hasNext = ref(false)
 
-    const sortStore = useSortStore()
-
     const searchQuery = ref<string>('');
-    const resultsQuery = ref([]);
 
     const updateSearchQuery = async (query: string) => {
       searchQuery.value = query;
     };
 
-    const getProducts = async (filters?: filter): Promise<void> => {
+    const getProducts = async (): Promise<void> => {
       try {
-        const params: Record<string, any> = {};
-        if (filters) {
-          if (filters.filter_id !== null) {
-            params.filter_id = filters.filter_id;
-          }
-          if (filters.single_value !== null) {
-            params.single_value = filters.single_value;
-          }
-          if (filters.range_value_from !== null) {
-            params.range_value_from = filters.range_value_from;
-          }
-          if (filters.range_value_to !== null) {
-            params.range_value_to = filters.range_value_to;
-          }
-          if (filters.flag_value !== null) {
-            params.flag_value = filters.flag_value;
-          }
-        }
-        const responseSpecial = await api.post<{ data: productsType[] }>('/1/products/?is_special=true', { params })
+        const responseSpecial = await api.post<{ data: productsType[] }>('/1/products/?is_special=true')
         productsSpecial.value = responseSpecial.data.data
-
-        const responseWillLike = await api.post<{ data: productsType[] }>(`/1/products/?only_promotional=true&name=${searchQuery.value}`, { params })
+        const responseWillLike = await api.post<{ data: productsType[] }>(`/1/products/?only_promotional=true&name=${searchQuery.value}&price_from=${productsFilterStore.range_value_from}&price_to=${productsFilterStore.range_value_to}`);
         productsWillLike.value = responseWillLike.data.data
-        console.log(productsWillLike.value)
       } catch (error) {
         console.error(error)
       }
     }
-    const getProductsSorted = async (filters?: filter): Promise<void> => {
+    const getProductsSorted = async (): Promise<void> => {
       try {
-        const params: Record<string, any> = {};
-      if (filters) {
-        if (filters.filter_id !== null) {
-          params.filter_id = filters.filter_id;
-        }
-        if (filters.single_value !== null) {
-          params.single_value = filters.single_value;
-        }
-        if (filters.range_value_from !== null) {
-          params.range_value_from = filters.range_value_from;
-        }
-        if (filters.range_value_to !== null) {
-          params.range_value_to = filters.range_value_to;
-        }
-        if (filters.flag_value !== null) {
-          params.flag_value = filters.flag_value;
-        }
-      }
-      const responseSorted = await api.post<{ data: productsType[] }>(`/1/products/?page=${currentPage.value}&ordered=true&order=${sortStore.selectedSort}`, { params })
-      productsSorted.value = responseSorted.data.data
-      totalPages.value = responseSorted.data.meta.paginator.total
-      hasPrev.value = responseSorted.data.meta.paginator.hasPrev
-      hasNext.value = responseSorted.data.meta.paginator.hasNext
-      currentPage.value = responseSorted.data.meta.paginator.page
-
+        const responseSorted = await api.post<{ data: productsType[] }>(`/1/products/?page=${currentPage.value}&ordered=true&order=${sortStore.selectedSort}&name=${searchQuery.value}&price_from=${productsFilterStore.range_value_from}&price_to=${productsFilterStore.range_value_to}`)
+        productsSorted.value = responseSorted.data.data
+        totalPages.value = responseSorted.data.meta.paginator.total
+        hasPrev.value = responseSorted.data.meta.paginator.hasPrev
+        hasNext.value = responseSorted.data.meta.paginator.hasNext
+        currentPage.value = responseSorted.data.meta.paginator.page
       } catch (error) {
         console.error(error)
       }
     }
-    return { productsSpecial, productsWillLike, productsSorted, hasPrev, hasNext, currentPage, totalPages, getProducts, getProductsSorted, searchQuery, resultsQuery, updateSearchQuery }
+    return { productsSpecial, productsWillLike, productsSorted, hasPrev, hasNext, currentPage, totalPages, getProducts, getProductsSorted, searchQuery, updateSearchQuery }
   },
-  // {
-  //   persist: true,
-  // }
+  {
+    persist: true,
+  }
 )
